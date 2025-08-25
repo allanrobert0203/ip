@@ -1,7 +1,29 @@
-Hello from
- ____        _        
-|  _ \ _   _| | _____ 
-| | | | | | | |/ / _ \
-| |_| | |_| |   <  __/
-|____/ \__,_|_|\_\___|
-
+Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.
+What can I do for you?
+(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo', 'deadline <description> /<duedate>', 'event <description> /<from> /<to>')
+---------------------------
+Got it! I've added this task:
+	[T][ ] borrow book
+Now you got 1 task/s in the list
+---------------------------
+Got it! I've added this task:
+	[D][ ] return book (by: Sunday)
+Now you got 2 task/s in the list
+---------------------------
+Got it! I've added this task:
+	[E][ ] project meeting (from: Mon 2pm to: 4pm)
+Now you got 3 task/s in the list
+---------------------------
+1. [T][ ] borrow book
+2. [D][ ] return book (by: Sunday)
+3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+---------------------------
+Great job! I have marked this task as done!
+	[D][X] return book (by: Sunday)
+---------------------------
+1. [T][ ] borrow book
+2. [D][X] return book (by: Sunday)
+3. [E][ ] project meeting (from: Mon 2pm to: 4pm)
+---------------------------
+Bye. Hope to see you again soon!
+---------------------------
