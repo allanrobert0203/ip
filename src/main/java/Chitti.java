@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Chitti {
 
@@ -9,27 +10,26 @@ public class Chitti {
 
     public static void main(String[] args) {
         Scanner myScanner = new Scanner(System.in);
-        Task[] list = new Task[100];
-        int counter = 0;
+        ArrayList<Task> list = new ArrayList<Task>();
 
         System.out.println("Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.\nWhat can I do for you?");
-        System.out.println("(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo <description>', 'deadline <description> /by <duedate>', 'event <description> /from <time> /to <time>')");
+        System.out.println("(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo <description>',\n 'deadline <description> /by <duedate>', 'event <description> /from <time> /to <time>', 'delete <number')");
         System.out.println("---------------------------");
         String input = myScanner.nextLine();
 
         while (!input.equals("bye")) {
             try {
                 if (input.equals("list")) {
-                    if (counter == 0) {
+                    if (list.isEmpty()) {
                         System.out.println("Your task list is empty! You need a well deserved rest!"); // if the list is empty
                     } else {
-                        for (int i = 0; i < counter; i++) {
+                        for (int i = 0; i < list.size(); i++) {
                             int order = i + 1;
-                            System.out.println(order + ". " + list[i].toString());
+                            System.out.println(order + ". " + list.get(i).toString());
                         }
                     }
                 } else if (input.startsWith("mark ")) {
-                    if (counter == 0) {
+                    if (list.isEmpty()) {
                         throw new ChittiException("You have no tasks to mark! Add some tasks first."); // When trying to mark an empty list
                     }
 
@@ -39,20 +39,20 @@ public class Chitti {
                     }
 
                     int taskIndex = Integer.parseInt(parts[1]) - 1;
-                    if (taskIndex < 0 || taskIndex >= counter) {
-                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + counter + " tasks."); // when trying to mark a task number that is outside the list range
+                    if (taskIndex < 0 || taskIndex >= list.size()) {
+                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + list.size() + " tasks."); // when trying to mark a task number that is outside the list range
                     }
 
-                    if (list[taskIndex].isMarked()) {
+                    if (list.get(taskIndex).isMarked()) {
                         System.out.println("Task " + (taskIndex + 1) + " is already marked.");
                     } else {
-                        list[taskIndex].markAsDone();
+                        list.get(taskIndex).markAsDone();
                         System.out.println("Great job! I have marked this task as done!");
-                        System.out.println("\t" + list[taskIndex].toString());
+                        System.out.println("\t" + list.get(taskIndex).toString());
                     }
 
                 } else if (input.startsWith("unmark ")) {
-                    if (counter == 0) {
+                    if (list.isEmpty()) {
                         throw new ChittiException("You have no tasks to unmark! Add some tasks first."); // when trying to unmark an empty list
                     }
 
@@ -62,16 +62,16 @@ public class Chitti {
                     }
 
                     int taskIndex = Integer.parseInt(parts[1]) - 1;
-                    if (taskIndex < 0 || taskIndex >= counter) {
-                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + counter + " tasks."); // when trying to unmark a task number that is outside the list range
+                    if (taskIndex < 0 || taskIndex >= list.size()) {
+                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + list.size() + " tasks."); // when trying to unmark a task number that is outside the list range
                     }
 
-                    if (!list[taskIndex].isMarked()) {
-                        System.out.println("Task " + (taskIndex + 1) + " is already unmarked."); 
+                    if (!list.get(taskIndex).isMarked()) {
+                        System.out.println("Task " + (taskIndex + 1) + " is already unmarked.");
                     } else {
-                        list[taskIndex].markAsNotDone();
+                        list.get(taskIndex).markAsNotDone();
                         System.out.println("Awwww, I've marked this task as not done yet:");
-                        System.out.println("\t" + list[taskIndex]);
+                        System.out.println("\t" + list.get(taskIndex));
                     }
 
                 } else if (input.equals("todo")) {
@@ -84,12 +84,11 @@ public class Chitti {
                     }
 
                     ToDo newToDo = new ToDo(description);
-                    list[counter] = newToDo;
-                    counter++;
+                    list.add(newToDo);
 
                     System.out.println("Got it! I've added this task:");
                     System.out.println("\t" + newToDo.toString());
-                    System.out.println("Now you have " + counter + " task(s) in the list");
+                    System.out.println("Now you have " + list.size() + " task(s) in the list");
 
                 } else if (input.equals("deadline")) {
                     throw new ChittiException("The description of a deadline cannot be empty. Use the following format: deadline <description> /by <duedate>"); // when trying to use 'deadline' without any task description
@@ -116,12 +115,11 @@ public class Chitti {
                     }
 
                     Deadline newDeadline = new Deadline(description, due);
-                    list[counter] = newDeadline;
-                    counter++;
+                    list.add(newDeadline);
 
                     System.out.println("Got it! I've added this task:");
                     System.out.println("\t" + newDeadline.toString());
-                    System.out.println("Now you have " + counter + " task(s) in the list");
+                    System.out.println("Now you have " + list.size() + " task(s) in the list");
 
                 } else if (input.equals("event")) {
                     throw new ChittiException("The description of an event cannot be empty. Use the following format: event <description> /from <time> /to <time>"); // when description is missing
@@ -149,12 +147,34 @@ public class Chitti {
                     }
 
                     Event newEvent = new Event(description, from, to);
-                    list[counter] = newEvent;
-                    counter++;
+                    list.add(newEvent);
 
                     System.out.println("Got it! I've added this task:");
                     System.out.println("\t" + newEvent.toString());
-                    System.out.println("Now you have " + counter + " task(s) in the list");
+                    System.out.println("Now you have " + list.size() + " task(s) in the list");
+
+                } else if (input.startsWith("delete ")) {
+                    if (list.isEmpty()) {
+                        throw new ChittiException("You have no tasks to delete! Add some tasks first."); // when list is empty
+                    }
+
+                    String[] parts = input.split(" ");
+                    if (parts.length < 2) {
+                        throw new ChittiException("Please specify a task number. Use the following format: delete <number>"); // invalid format
+                    }
+
+                    int taskIndex = Integer.parseInt(parts[1]) - 1;
+                    if (taskIndex < 0 || taskIndex >= list.size()) {
+                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + list.size() + " tasks."); // when trying to delete a task that doesn't exist
+                    }
+
+                    Task removedTask = list.get(taskIndex);
+                    list.remove(taskIndex);
+
+                    System.out.println("---------------------------");
+                    System.out.println(" Noted. I've removed this task:");
+                    System.out.println("\t" + removedTask);
+                    System.out.println("Now you have " + list.size() + " task/s in the list.");
 
                 } else {
                     throw new ChittiException("I'm sorry, but I don't know what that means 😭"); // invalid command
@@ -165,7 +185,7 @@ public class Chitti {
             } catch (ChittiException e) {
                 printError(e.getMessage());
             } catch (ArrayIndexOutOfBoundsException e) {
-                printError("I've run out of memory! Too many tasks!"); // when more than 100 tasks
+                printError("Ahhhhh, I've run out of memory! Too many tasks! Please delete a few in order to add new tasks."); // when more than 100 tasks
             } catch (Exception e) {
                 printError("Oops! Something unexpected went wrong. Please try again.");
                 System.out.println("---------------------------");
