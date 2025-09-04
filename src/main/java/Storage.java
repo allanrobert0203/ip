@@ -57,10 +57,16 @@ public class Storage {
 			return String.join(" | ", "T", status, task.description);
 		} else if (task instanceof Deadline) {
 			Deadline d = (Deadline) task;
-			return String.join(" | ", "D", status, d.description, d.date);
+			String stored = DateTimeUtil.formatForStorage(d.getDateTime(), d.hasTimeComponent());
+			String hasTimeFlag = d.hasTimeComponent() ? "1" : "0";
+			return String.join(" | ", "D", status, d.description, stored, hasTimeFlag);
 		} else if (task instanceof Event) {
 			Event e = (Event) task;
-			return String.join(" | ", "E", status, e.description, e.startDateTime, e.endDateTime);
+			String startStored = DateTimeUtil.formatForStorage(e.startDateTime, e.startHasTime);
+			String endStored = DateTimeUtil.formatForStorage(e.endDateTime, e.endHasTime);
+			String startFlag = e.startHasTime ? "1" : "0";
+			String endFlag = e.endHasTime ? "1" : "0";
+			return String.join(" | ", "E", status, e.description, startStored, startFlag, endStored, endFlag);
 		} else {
 			return String.join(" | ", "T", status, task.description);
 		}
@@ -83,13 +89,43 @@ public class Storage {
 				if (parts.length < 4) {
 					return null;
 				}
-				task = new Deadline(description, parts[3]);
+				// New format: D | status | desc | storedDateOrDateTime | hasTimeFlag
+				if (parts.length >= 5) {
+					String stored = parts[3];
+					String flag = parts[4];
+					DateTimeUtil.ParsedDateTime parsed = DateTimeUtil.tryParse(stored);
+					if (parsed != null) {
+						boolean hasTime = "1".equals(flag) || parsed.hasTime;
+						task = new Deadline(description, parsed.dateTime, hasTime);
+					} else {
+						task = new Deadline(description, parts[3]);
+					}
+				} else {
+					// Legacy format: D | status | desc | dateString
+					task = new Deadline(description, parts[3]);
+				}
 				break;
 			case "E":
 				if (parts.length < 5) {
 					return null;
 				}
-				task = new Event(description, parts[3], parts[4]);
+				// New format: E | status | desc | startStored | startFlag | endStored | endFlag
+				if (parts.length >= 7) {
+					String startStored = parts[3];
+					String startFlag = parts[4];
+					String endStored = parts[5];
+					String endFlag = parts[6];
+					DateTimeUtil.ParsedDateTime ps = DateTimeUtil.tryParse(startStored);
+					DateTimeUtil.ParsedDateTime pe = DateTimeUtil.tryParse(endStored);
+					if (ps != null && pe != null) {
+						task = new Event(description, ps.dateTime, "1".equals(startFlag) || ps.hasTime, pe.dateTime, "1".equals(endFlag) || pe.hasTime);
+					} else {
+						task = new Event(description, parts[3], parts[4]);
+					}
+				} else {
+					// Legacy format: E | status | desc | start | end
+					task = new Event(description, parts[3], parts[4]);
+				}
 				break;
 			default:
 				return null;
