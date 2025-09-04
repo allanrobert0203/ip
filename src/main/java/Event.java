@@ -1,15 +1,12 @@
 public class Event extends Task{
 
-    protected String description;
-    protected Boolean isDone;
     protected String startDateTime;
     protected String endDateTime;
 
-    public Event(String description, String startDateTime, String endDateTimee) {
+    public Event(String description, String startDateTime, String endDateTime) {
         super(description);
-        this.isDone = false;
         this.startDateTime = startDateTime;
-        this.endDateTime = endDateTimee;
+        this.endDateTime = endDateTime;
     }
 
     public String toString() {

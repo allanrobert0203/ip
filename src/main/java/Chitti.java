@@ -11,6 +11,12 @@ public class Chitti {
     public static void main(String[] args) {
         Scanner myScanner = new Scanner(System.in);
         ArrayList<Task> list = new ArrayList<Task>();
+        Storage storage = new Storage("./data/chitti.txt");
+
+        try {
+            list.addAll(storage.load());
+        } catch (Exception ignored) {
+        }
 
         System.out.println("Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.\nWhat can I do for you?");
         System.out.println("(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo <description>',\n 'deadline <description> /by <duedate>', 'event <description> /from <time> /to <time>', 'delete <number')");
@@ -49,6 +55,11 @@ public class Chitti {
                         list.get(taskIndex).markAsDone();
                         System.out.println("Great job! I have marked this task as done!");
                         System.out.println("\t" + list.get(taskIndex).toString());
+                        try {
+                            storage.save(list);
+                        } catch (Exception ignored) {
+
+                        }
                     }
 
                 } else if (input.startsWith("unmark ")) {
@@ -72,6 +83,11 @@ public class Chitti {
                         list.get(taskIndex).markAsNotDone();
                         System.out.println("Awwww, I've marked this task as not done yet:");
                         System.out.println("\t" + list.get(taskIndex));
+                        try {
+                            storage.save(list);
+                        } catch (Exception ignored) {
+
+                        }
                     }
 
                 } else if (input.equals("todo")) {
@@ -89,6 +105,11 @@ public class Chitti {
                     System.out.println("Got it! I've added this task:");
                     System.out.println("\t" + newToDo.toString());
                     System.out.println("Now you have " + list.size() + " task(s) in the list");
+                    try {
+                        storage.save(list);
+                    } catch (Exception ignored) {
+
+                    }
 
                 } else if (input.equals("deadline")) {
                     throw new ChittiException("The description of a deadline cannot be empty. Use the following format: deadline <description> /by <duedate>"); // when trying to use 'deadline' without any task description
@@ -120,6 +141,11 @@ public class Chitti {
                     System.out.println("Got it! I've added this task:");
                     System.out.println("\t" + newDeadline.toString());
                     System.out.println("Now you have " + list.size() + " task(s) in the list");
+                    try {
+                        storage.save(list);
+                    } catch (Exception ignored) {
+
+                    }
 
                 } else if (input.equals("event")) {
                     throw new ChittiException("The description of an event cannot be empty. Use the following format: event <description> /from <time> /to <time>"); // when description is missing
@@ -152,6 +178,11 @@ public class Chitti {
                     System.out.println("Got it! I've added this task:");
                     System.out.println("\t" + newEvent.toString());
                     System.out.println("Now you have " + list.size() + " task(s) in the list");
+                    try {
+                        storage.save(list);
+                    } catch (Exception ignored) {
+
+                    }
 
                 } else if (input.startsWith("delete ")) {
                     if (list.isEmpty()) {
@@ -175,6 +206,11 @@ public class Chitti {
                     System.out.println(" Noted. I've removed this task:");
                     System.out.println("\t" + removedTask);
                     System.out.println("Now you have " + list.size() + " task/s in the list.");
+                    try {
+                        storage.save(list);
+                    } catch (Exception ignored) {
+
+                    }
 
                 } else {
                     throw new ChittiException("I'm sorry, but I don't know what that means 😭"); // invalid command
@@ -200,6 +236,11 @@ public class Chitti {
 
         System.out.println("Bye. Hope to see you again soon!");
         System.out.println("---------------------------");
+        try {
+            storage.save(list);
+        } catch (Exception ignored) {
+            
+        }
         myScanner.close();
     }
 }
