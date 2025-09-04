@@ -19,7 +19,8 @@ public class Chitti {
         }
 
         System.out.println("Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.\nWhat can I do for you?");
-        System.out.println("(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo <description>',\n 'deadline <description> /by <duedate>', 'event <description> /from <time> /to <time>', 'delete <number')");
+        System.out.println("(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo <description>',\n 'deadline <description> /by <dateOrDateTime>', 'event <description> /from <dateOrDateTime> /to <dateOrDateTime>', 'on <date>', 'delete <number')");
+        System.out.println("\nAccepted date formats: yyyy-MM-dd, yyyy-MM-dd HHmm, d/M/yyyy, d/M/yyyy HHmm");
         System.out.println("---------------------------");
         String input = myScanner.nextLine();
 
@@ -182,6 +183,36 @@ public class Chitti {
                         storage.save(list);
                     } catch (Exception ignored) {
 
+                    }
+
+                } else if (input.startsWith("on ")) {
+                    String dateStr = input.substring(3).trim();
+                    DateTimeUtil.ParsedDateTime parsed = DateTimeUtil.tryParse(dateStr);
+                    if (parsed == null) {
+                        throw new ChittiException("Could not understand the date. Try formats like yyyy-MM-dd or d/M/yyyy");
+                    }
+                    System.out.println("Tasks on " + DateTimeUtil.formatForDisplay(parsed.dateTime, false) + ":");
+                    boolean any = false;
+                    for (int i = 0; i < list.size(); i++) {
+                        Task t = list.get(i);
+                        if (t instanceof Deadline) {
+                            Deadline deadline = (Deadline) t;
+                            if (deadline.getDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
+                                int order = i + 1;
+                                System.out.println(order + ". " + deadline.toString());
+                                any = true;
+                            }
+                        } else if (t instanceof Event) {
+                            Event event = (Event) t;
+                            if (event.startDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate()) || event.endDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate())) {
+                                int order = i + 1;
+                                System.out.println(order + ". " + event.toString());
+                                any = true;
+                            }
+                        }
+                    }
+                    if (!any) {
+                        System.out.println("No tasks found on this date.");
                     }
 
                 } else if (input.startsWith("delete ")) {
