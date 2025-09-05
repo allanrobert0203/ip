@@ -1,3 +1,10 @@
+package chitti.command;
+
+import chitti.exception.ChittiException;
+import chitti.storage.Storage;
+import chitti.task.TaskList;
+import chitti.ui.Ui;
+
 public class MarkCommand extends Command {
 
     private final String arg;
@@ -15,11 +22,11 @@ public class MarkCommand extends Command {
         int taskIndex = Integer.parseInt(arg) - 1;
 
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + tasks.size() + " tasks.");
+            throw new ChittiException("chitti.task.Task " + (taskIndex + 1) + " doesn't exist! You have " + tasks.size() + " tasks.");
         }
 
         if (tasks.get(taskIndex).isMarked()) {
-            System.out.println("Task " + (taskIndex + 1) + " is already marked.");
+            System.out.println("chitti.task.Task " + (taskIndex + 1) + " is already marked.");
             return;
         }
 
