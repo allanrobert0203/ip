@@ -1,277 +1,40 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-
 public class Chitti {
 
+	private final Storage storage;
+	private TaskList tasks;
+	private final Ui ui;
 
-    private static void printError(String message) {
-        System.out.println("\tERROR! " + message);
-    }
+	public Chitti(String filePath) {
+		this.ui = new Ui();
+		this.storage = new Storage(filePath);
+		try {
+			this.tasks = new TaskList(this.storage.load());
+		} catch (Exception e) {
+			this.ui.showError("Failed to load tasks from file. Starting with an empty list.");
+			this.tasks = new TaskList();
+		}
+	}
 
-    public static void main(String[] args) {
-        Scanner myScanner = new Scanner(System.in);
-        ArrayList<Task> list = new ArrayList<Task>();
-        Storage storage = new Storage("./data/chitti.txt");
+	public void run() {
+		ui.welcome();
+		boolean isExit = false;
+		while (!isExit) {
+			try {
+				String fullCommand = ui.readCommand();
+				ui.showLine();
+				Command c = Parser.parse(fullCommand);
+				c.execute(tasks, ui, storage);
+				isExit = c.isExit();
+			} catch (ChittiException e) {
+				ui.showError(e.getMessage());
+			} catch (Exception e) {
+				ui.showError("Oops! Something unexpected went wrong. Please try again.");
+			}
+			ui.showLine();
+		}
+	}
 
-        try {
-            list.addAll(storage.load());
-        } catch (Exception ignored) {
-        }
-
-        System.out.println("Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.\nWhat can I do for you?");
-        System.out.println("(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo <description>',\n 'deadline <description> /by <dateOrDateTime>', 'event <description> /from <dateOrDateTime> /to <dateOrDateTime>', 'on <date>', 'delete <number')");
-        System.out.println("\nAccepted date formats: yyyy-MM-dd, yyyy-MM-dd HHmm, d/M/yyyy, d/M/yyyy HHmm");
-        System.out.println("---------------------------");
-        String input = myScanner.nextLine();
-
-        while (!input.equals("bye")) {
-            try {
-                if (input.equals("list")) {
-                    if (list.isEmpty()) {
-                        System.out.println("Your task list is empty! You need a well deserved rest!"); // if the list is empty
-                    } else {
-                        for (int i = 0; i < list.size(); i++) {
-                            int order = i + 1;
-                            System.out.println(order + ". " + list.get(i).toString());
-                        }
-                    }
-                } else if (input.startsWith("mark ")) {
-                    if (list.isEmpty()) {
-                        throw new ChittiException("You have no tasks to mark! Add some tasks first."); // When trying to mark an empty list
-                    }
-
-                    String[] parts = input.split(" ");
-                    if (parts.length < 2) {
-                        throw new ChittiException("Please specify a task number. Use the following format: mark <number>"); // Using the 'mark' function without specifying the task number
-                    }
-
-                    int taskIndex = Integer.parseInt(parts[1]) - 1;
-                    if (taskIndex < 0 || taskIndex >= list.size()) {
-                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + list.size() + " tasks."); // when trying to mark a task number that is outside the list range
-                    }
-
-                    if (list.get(taskIndex).isMarked()) {
-                        System.out.println("Task " + (taskIndex + 1) + " is already marked.");
-                    } else {
-                        list.get(taskIndex).markAsDone();
-                        System.out.println("Great job! I have marked this task as done!");
-                        System.out.println("\t" + list.get(taskIndex).toString());
-                        try {
-                            storage.save(list);
-                        } catch (Exception ignored) {
-
-                        }
-                    }
-
-                } else if (input.startsWith("unmark ")) {
-                    if (list.isEmpty()) {
-                        throw new ChittiException("You have no tasks to unmark! Add some tasks first."); // when trying to unmark an empty list
-                    }
-
-                    String[] parts = input.split(" ");
-                    if (parts.length < 2) {
-                        throw new ChittiException("Please specify a task number. Use the following format: unmark <number>"); // Using the 'unmark' function without specifying the task number
-                    }
-
-                    int taskIndex = Integer.parseInt(parts[1]) - 1;
-                    if (taskIndex < 0 || taskIndex >= list.size()) {
-                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + list.size() + " tasks."); // when trying to unmark a task number that is outside the list range
-                    }
-
-                    if (!list.get(taskIndex).isMarked()) {
-                        System.out.println("Task " + (taskIndex + 1) + " is already unmarked.");
-                    } else {
-                        list.get(taskIndex).markAsNotDone();
-                        System.out.println("Awwww, I've marked this task as not done yet:");
-                        System.out.println("\t" + list.get(taskIndex));
-                        try {
-                            storage.save(list);
-                        } catch (Exception ignored) {
-
-                        }
-                    }
-
-                } else if (input.equals("todo")) {
-                    throw new ChittiException("The description of a todo cannot be empty. Use the following format: todo <description>"); // when trying to use 'todo' without any task description
-
-                } else if (input.startsWith("todo ")) {
-                    String description = input.substring(5).trim();
-                    if (description.isEmpty()) {
-                        throw new Exception("The description of a todo cannot be empty. Use the following format: todo <description>"); // when trying to use 'todo' with a space but without any task description
-                    }
-
-                    ToDo newToDo = new ToDo(description);
-                    list.add(newToDo);
-
-                    System.out.println("Got it! I've added this task:");
-                    System.out.println("\t" + newToDo.toString());
-                    System.out.println("Now you have " + list.size() + " task(s) in the list");
-                    try {
-                        storage.save(list);
-                    } catch (Exception ignored) {
-
-                    }
-
-                } else if (input.equals("deadline")) {
-                    throw new ChittiException("The description of a deadline cannot be empty. Use the following format: deadline <description> /by <duedate>"); // when trying to use 'deadline' without any task description
-
-                } else if (input.startsWith("deadline ")) {
-                    String remainingInput = input.substring(9).trim();
-                    if (!remainingInput.contains(" /by ")) {
-                        throw new ChittiException("Missing '/by' keyword. Use the following format: deadline <description> /by <duedate>"); // when user forgets to use the '/by'
-                    }
-
-                    String[] parts = remainingInput.split(" /by ");
-                    if (parts.length < 2) {
-                        throw new ChittiException("Invalid format. Use the following format: deadline <description> /by <duedate>"); // invalid formatting
-                    }
-
-                    String description = parts[0].trim();
-                    String due = parts[1].trim();
-
-                    if (description.isEmpty()) {
-                        throw new ChittiException("The description of a deadline cannot be empty."); // when description is missing
-                    }
-                    if (due.isEmpty()) {
-                        throw new ChittiException("The due date cannot be empty. Use the following format: deadline <description> /by <duedate>"); // when duedate is missing
-                    }
-
-                    Deadline newDeadline = new Deadline(description, due);
-                    list.add(newDeadline);
-
-                    System.out.println("Got it! I've added this task:");
-                    System.out.println("\t" + newDeadline.toString());
-                    System.out.println("Now you have " + list.size() + " task(s) in the list");
-                    try {
-                        storage.save(list);
-                    } catch (Exception ignored) {
-
-                    }
-
-                } else if (input.equals("event")) {
-                    throw new ChittiException("The description of an event cannot be empty. Use the following format: event <description> /from <time> /to <time>"); // when description is missing
-
-                } else if (input.startsWith("event ")) {
-                    String restOfInput = input.substring(6).trim();
-                    if (!restOfInput.contains(" /from ") || !restOfInput.contains(" /to ")) {
-                        throw new ChittiException("Missing '/from' or '/to' keyword. Use the following format: event <description> /from <time> /to <time>"); // when the '/from' or '/to' keyword is missing
-                    }
-
-                    String[] parts = restOfInput.split(" /from | /to ");
-                    if (parts.length < 3) {
-                        throw new ChittiException("Invalid format. Use the following format: event <description> /from <time> /to <time>"); // invalid formatting
-                    }
-
-                    String description = parts[0].trim();
-                    String from = parts[1].trim();
-                    String to = parts[2].trim();
-
-                    if (description.isEmpty()) {
-                        throw new ChittiException("The description of an event cannot be empty."); // when description is missing
-                    }
-                    if (from.isEmpty() || to.isEmpty()) {
-                        throw new ChittiException("Start and end times cannot be empty. Usage: event <description> /from <time> /to <time>"); // when start or end time is missing
-                    }
-
-                    Event newEvent = new Event(description, from, to);
-                    list.add(newEvent);
-
-                    System.out.println("Got it! I've added this task:");
-                    System.out.println("\t" + newEvent.toString());
-                    System.out.println("Now you have " + list.size() + " task(s) in the list");
-                    try {
-                        storage.save(list);
-                    } catch (Exception ignored) {
-
-                    }
-
-                } else if (input.startsWith("on ")) {
-                    String dateStr = input.substring(3).trim();
-                    DateTimeUtil.ParsedDateTime parsed = DateTimeUtil.tryParse(dateStr);
-                    if (parsed == null) {
-                        throw new ChittiException("Could not understand the date. Try formats like yyyy-MM-dd or d/M/yyyy");
-                    }
-                    System.out.println("Tasks on " + DateTimeUtil.formatForDisplay(parsed.dateTime, false) + ":");
-                    boolean any = false;
-                    for (int i = 0; i < list.size(); i++) {
-                        Task t = list.get(i);
-                        if (t instanceof Deadline) {
-                            Deadline deadline = (Deadline) t;
-                            if (deadline.getDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
-                                int order = i + 1;
-                                System.out.println(order + ". " + deadline.toString());
-                                any = true;
-                            }
-                        } else if (t instanceof Event) {
-                            Event event = (Event) t;
-                            if (event.startDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate()) || event.endDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate())) {
-                                int order = i + 1;
-                                System.out.println(order + ". " + event.toString());
-                                any = true;
-                            }
-                        }
-                    }
-                    if (!any) {
-                        System.out.println("No tasks found on this date.");
-                    }
-
-                } else if (input.startsWith("delete ")) {
-                    if (list.isEmpty()) {
-                        throw new ChittiException("You have no tasks to delete! Add some tasks first."); // when list is empty
-                    }
-
-                    String[] parts = input.split(" ");
-                    if (parts.length < 2) {
-                        throw new ChittiException("Please specify a task number. Use the following format: delete <number>"); // invalid format
-                    }
-
-                    int taskIndex = Integer.parseInt(parts[1]) - 1;
-                    if (taskIndex < 0 || taskIndex >= list.size()) {
-                        throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + list.size() + " tasks."); // when trying to delete a task that doesn't exist
-                    }
-
-                    Task removedTask = list.get(taskIndex);
-                    list.remove(taskIndex);
-
-                    System.out.println("---------------------------");
-                    System.out.println(" Noted. I've removed this task:");
-                    System.out.println("\t" + removedTask);
-                    System.out.println("Now you have " + list.size() + " task/s in the list.");
-                    try {
-                        storage.save(list);
-                    } catch (Exception ignored) {
-
-                    }
-
-                } else {
-                    throw new ChittiException("I'm sorry, but I don't know what that means 😭"); // invalid command
-                }
-
-            } catch (NumberFormatException e) {
-                printError("Please enter a valid number for the task.");
-            } catch (ChittiException e) {
-                printError(e.getMessage());
-            } catch (ArrayIndexOutOfBoundsException e) {
-                printError("Ahhhhh, I've run out of memory! Too many tasks! Please delete a few in order to add new tasks."); // when more than 100 tasks
-            } catch (Exception e) {
-                printError("Oops! Something unexpected went wrong. Please try again.");
-                System.out.println("---------------------------");
-                System.out.println("FOR DEBUGGING PURPOSE");
-                e.printStackTrace();
-                System.out.println("---------------------------");
-            }
-
-            System.out.println("---------------------------");
-            input = myScanner.nextLine();
-        }
-
-        System.out.println("Bye. Hope to see you again soon!");
-        System.out.println("---------------------------");
-        try {
-            storage.save(list);
-        } catch (Exception ignored) {
-            
-        }
-        myScanner.close();
-    }
+	public static void main(String[] args) {
+		new Chitti("./data/chitti.txt").run();
+	}
 }

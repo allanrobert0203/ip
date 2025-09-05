@@ -1,0 +1,2 @@
+T | 0 | wash dishes
+D | 1 | do assignment | 2025-12-22 | 0
