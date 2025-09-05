@@ -1,3 +1,11 @@
+package chitti.command;
+
+import chitti.exception.ChittiException;
+import chitti.storage.Storage;
+import chitti.task.Task;
+import chitti.task.TaskList;
+import chitti.ui.Ui;
+
 public class DeleteCommand extends Command {
 
     private final String arg;
@@ -15,7 +23,7 @@ public class DeleteCommand extends Command {
         int taskIndex = Integer.parseInt(arg) - 1;
 
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new ChittiException("Task " + (taskIndex + 1) + " doesn't exist! You have " + tasks.size() + " tasks.");
+            throw new ChittiException("chitti.task.Task " + (taskIndex + 1) + " doesn't exist! You have " + tasks.size() + " tasks.");
         }
 
         Task removedTask = tasks.remove(taskIndex);

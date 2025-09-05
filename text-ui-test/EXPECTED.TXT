@@ -1,4 +1,4 @@
-Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.
+Hello! I'm chitti.Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.
 What can I do for you?
 (Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo', 'deadline <description> /<duedate>', 'event <description> /<from> /<to>')
 ---------------------------

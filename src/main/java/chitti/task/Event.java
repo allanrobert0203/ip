@@ -1,11 +1,14 @@
+package chitti.task;
+
 import java.time.LocalDateTime;
+import chitti.util.DateTimeUtil;
 
-public class Event extends Task{
+public class Event extends Task {
 
-    protected LocalDateTime startDateTime;
-    protected LocalDateTime endDateTime;
-    protected boolean startHasTime;
-    protected boolean endHasTime;
+    public LocalDateTime startDateTime;
+    public LocalDateTime endDateTime;
+    public boolean startHasTime;
+    public boolean endHasTime;
 
     public Event(String description, String start, String end) {
         super(description);

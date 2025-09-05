@@ -1,3 +1,12 @@
+package chitti;
+
+import chitti.command.Command;
+import chitti.command.Parser;
+import chitti.exception.ChittiException;
+import chitti.storage.Storage;
+import chitti.task.TaskList;
+import chitti.ui.Ui;
+
 public class Chitti {
 
 	private final Storage storage;

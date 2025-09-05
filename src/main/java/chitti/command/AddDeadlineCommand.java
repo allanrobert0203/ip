@@ -1,3 +1,11 @@
+package chitti.command;
+
+import chitti.exception.ChittiException;
+import chitti.storage.Storage;
+import chitti.task.Deadline;
+import chitti.task.TaskList;
+import chitti.ui.Ui;
+
 public class AddDeadlineCommand extends Command {
 
     private final String rest;
