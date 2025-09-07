@@ -5,6 +5,8 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
+mainClassName = 'chitti.Chitti'
+
 repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
@@ -34,7 +36,7 @@ application {
 }
 
 shadowJar {
-    archiveBaseName = "duke"
+    archiveBaseName = "chitti"
     archiveClassifier = null
 }
 
