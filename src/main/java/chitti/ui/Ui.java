@@ -11,7 +11,7 @@ public class Ui {
     }
 
     public void welcome() {
-        System.out.println("Hello! I'm chitti.Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.\nWhat can I do for you?");
+        System.out.println("Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte.\nWhat can I do for you?");
         System.out.println("(Commands: 'list', 'mark <number>', 'unmark <number>', 'bye', 'todo <description>',\n 'deadline <description> /by <dateOrDateTime>', 'event <description> /from <dateOrDateTime> /to <dateOrDateTime>', 'on <date>', 'delete <number')");
         System.out.println("\nAccepted date formats: yyyy-MM-dd, yyyy-MM-dd HHmm, d/M/yyyy, d/M/yyyy HHmm");
         showLine();
