@@ -80,7 +80,7 @@ public class Storage {
 	private String serializeTask(Task task) {
 		String status = task.isMarked() ? "1" : "0";
 		if (task instanceof ToDo) {
-			return String.join(" | ", "T", status, task.description);
+			return String.join(" | ", "T", status, task.getDescription());
 		} else if (task instanceof Deadline) {
 			Deadline d = (Deadline) task;
 			String stored = DateTimeUtil.formatForStorage(d.getDateTime(), d.hasTimeComponent());
@@ -88,10 +88,10 @@ public class Storage {
 			return String.join(" | ", "D", status, d.getDescription(), stored, hasTimeFlag);
 		} else if (task instanceof Event) {
 			Event e = (Event) task;
-			String startStored = DateTimeUtil.formatForStorage(e.getStartDateTime(), e.hasStartTime());
-			String endStored = DateTimeUtil.formatForStorage(e.getEndDateTime(), e.hasEndTime());
-			String startFlag = e.hasStartTime() ? "1" : "0";
-			String endFlag = e.hasEndTime() ? "1" : "0";
+			String startStored = DateTimeUtil.formatForStorage(e.getStartDateTime(), e.isStartHasTime());
+			String endStored = DateTimeUtil.formatForStorage(e.getEndDateTime(), e.isEndHasTime());
+			String startFlag = e.isStartHasTime() ? "1" : "0";
+			String endFlag = e.isEndHasTime() ? "1" : "0";
 			return String.join(" | ", "E", status, e.getDescription(), startStored, startFlag, endStored, endFlag);
 		} else {
 			return String.join(" | ", "T", status, task.getDescription());

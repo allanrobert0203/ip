@@ -4,8 +4,8 @@ package chitti.task;
  * Base type for all tasks managed by the app.
  */
 public class Task {
-    public String description;
-    public boolean isDone;
+    private String description;
+    boolean isDone;
 
     public Task (String description) {
         this.description = description;

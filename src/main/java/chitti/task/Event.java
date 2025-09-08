@@ -49,11 +49,11 @@ public class Event extends Task {
         return this.endDateTime;
     }
 
-    public boolean hasStartTime() {
+    public boolean ishasStartTime() {
         return this.startHasTime;
     }
 
-    public boolean hasEndTime() {
+    public boolean ishasEndTime() {
         return this.endHasTime;
     }
 
