@@ -6,6 +6,9 @@ import chitti.task.Event;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Adds a new Event task parsed from "<desc> /from <start> /to <end>".
+ */
 public class AddEventCommand extends Command {
 
     private final String rest;

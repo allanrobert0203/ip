@@ -7,12 +7,20 @@ import chitti.storage.Storage;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Main application entry point that wires together UI, storage, and command handling.
+ */
 public class Chitti {
 
 	private final Storage storage;
 	private TaskList tasks;
 	private final Ui ui;
 
+	/**
+	 * Constructs the application with a backing storage file.
+	 *
+	 * @param filePath relative path to the storage file
+	 */
 	public Chitti(String filePath) {
 		this.ui = new Ui();
 		this.storage = new Storage(filePath);
@@ -24,6 +32,10 @@ public class Chitti {
 		}
 	}
 
+	/**
+	 * Runs the main event loop: reads user commands, parses them into commands,
+	 * executes them, and exits when requested.
+	 */
 	public void run() {
 		ui.welcome();
 		boolean isExit = false;
@@ -43,6 +55,11 @@ public class Chitti {
 		}
 	}
 
+	/**
+	 * Program entrypoint.
+	 *
+	 * @param args CLI arguments (unused)
+	 */
 	public static void main(String[] args) {
 		new Chitti("./data/chitti.txt").run();
 	}

@@ -5,6 +5,9 @@ import chitti.storage.Storage;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Marks a task as done by index (1-based).
+ */
 public class MarkCommand extends Command {
 
     private final String arg;

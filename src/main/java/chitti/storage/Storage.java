@@ -13,14 +13,27 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Persists tasks to a file and loads them back, supporting both legacy and
+ * new date/time formats.
+ */
 public class Storage {
 
 	private final File file;
 
+	/**
+	 * Creates a storage manager pointing at the given file path.
+	 * @param relativePath path to the data file (relative or absolute)
+	 */
 	public Storage(String relativePath) {
         this.file = new File(relativePath);
 	}
 
+	/**
+	 * Loads tasks from the configured file.
+	 * @return list of tasks loaded from disk
+	 * @throws IOException if file IO fails
+	 */
 	public ArrayList<Task> load() throws IOException {
 		ensureFileExists();
 		ArrayList<Task> tasks = new ArrayList<>();
@@ -39,6 +52,11 @@ public class Storage {
 		return tasks;
 	}
 
+	/**
+	 * Saves the provided tasks to the configured file, overwriting existing content.
+	 * @param tasks tasks to persist
+	 * @throws IOException if file IO fails
+	 */
 	public void save(List<Task> tasks) throws IOException {
 		ensureFileExists();
 		try (FileWriter writer = new FileWriter(this.file)) {

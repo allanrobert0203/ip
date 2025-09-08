@@ -3,6 +3,9 @@ package chitti.task;
 import java.time.LocalDateTime;
 import chitti.util.DateTimeUtil;
 
+/**
+ * Bounded task that spans a start and end date/time.
+ */
 public class Event extends Task {
 
     public LocalDateTime startDateTime;

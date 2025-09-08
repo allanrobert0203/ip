@@ -5,6 +5,9 @@ import chitti.storage.Storage;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Marks a task as not done by index (1-based).
+ */
 public class UnmarkCommand extends Command {
     private final String arg;
 

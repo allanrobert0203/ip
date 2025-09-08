@@ -2,8 +2,17 @@ package chitti.command;
 
 import chitti.exception.ChittiException;
 
+/**
+ * Parses raw user input into executable commands.
+ */
 public class Parser {
 
+    /**
+     * Parses an input line to a specific Command instance.
+     * @param fullCommand raw user input
+     * @return a concrete Command to execute
+     * @throws ChittiException if the command is unknown or invalid
+     */
     public static Command parse(String fullCommand) throws ChittiException {
         String input = fullCommand.trim();
 
