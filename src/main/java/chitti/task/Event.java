@@ -5,10 +5,10 @@ import chitti.util.DateTimeUtil;
 
 public class Event extends Task {
 
-    public LocalDateTime startDateTime;
-    public LocalDateTime endDateTime;
-    public boolean startHasTime;
-    public boolean endHasTime;
+    protected LocalDateTime startDateTime;
+    protected LocalDateTime endDateTime;
+    protected boolean startHasTime;
+    protected boolean endHasTime;
 
     public Event(String description, String start, String end) {
         super(description);
@@ -36,6 +36,22 @@ public class Event extends Task {
         this.startHasTime = startHasTime;
         this.endDateTime = end;
         this.endHasTime = endHasTime;
+    }
+
+    public LocalDateTime getStartDateTime() {
+        return this.startDateTime;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return this.endDateTime;
+    }
+
+    public boolean isStartHasTime() {
+        return this.startHasTime;
+    }
+
+    public boolean isEndHasTime() {
+        return this.endHasTime;
     }
 
     public String toString() {

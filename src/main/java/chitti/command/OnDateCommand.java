@@ -40,7 +40,7 @@ public class OnDateCommand extends Command {
                 }
             } else if (t instanceof Event) {
                 Event event = (Event) t;
-                if (event.startDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate()) || event.endDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate())) {
+                if (event.getStartDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate()) || event.getEndDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
                     int order = i + 1;
                     System.out.println(order + ". " + event.toString());
                     any = true;

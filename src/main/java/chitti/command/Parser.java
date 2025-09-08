@@ -35,6 +35,8 @@ public class Parser {
             return new DeleteCommand(input.substring(7));
         } else if (input.startsWith("on ")) {
             return new OnDateCommand(input.substring(3));
+        } else if (input.startsWith("find ")) {
+            return new FindCommand(input.substring(5));
         } else {
             throw new ChittiException("I'm sorry, but I don't know what that means 😭");
         }
