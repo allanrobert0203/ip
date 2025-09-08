@@ -4,6 +4,9 @@ import chitti.storage.Storage;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Prints all tasks with their status.
+ */
 public class ListCommand extends Command {
 
     @Override

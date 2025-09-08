@@ -5,8 +5,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Utilities for parsing and formatting dates/times in user-facing and storage formats.
+ */
 public class DateTimeUtil {
 
+    /**
+     * Result of parsing a date/time string.
+     */
     public static class ParsedDateTime {
         public final LocalDateTime dateTime;
         public final boolean hasTime;
@@ -22,6 +28,12 @@ public class DateTimeUtil {
     private static final DateTimeFormatter DATE_TIME_ISO_COMPACT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter DATE_TIME_SLASH_COMPACT = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
+    /**
+     * Attempts to parse an input as either a date or a date-time.
+     * Supports yyyy-MM-dd, yyyy-MM-dd HHmm, d/M/yyyy, d/M/yyyy HHmm.
+     * @param input raw input string
+     * @return ParsedDateTime if successful; null otherwise
+     */
     public static ParsedDateTime tryParse(String input) {
         if (input == null) {
             return null;
@@ -54,6 +66,9 @@ public class DateTimeUtil {
         return null;
     }
 
+    /**
+     * Formats a date/time for display, e.g., "Oct 15 2019, 6pm" or "Oct 15 2019".
+     */
     public static String formatForDisplay(LocalDateTime dateTime, boolean hasTime) {
         if (dateTime == null) {
             return "";
@@ -70,6 +85,9 @@ public class DateTimeUtil {
         return datePart + ", " + timePart;
     }
 
+    /**
+     * Formats a date/time for storage: yyyy-MM-dd or yyyy-MM-dd HHmm when time is present.
+     */
     public static String formatForStorage(LocalDateTime dateTime, boolean hasTime) {
         if (dateTime == null) {
             return "";

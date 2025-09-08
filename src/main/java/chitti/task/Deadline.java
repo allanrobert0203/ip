@@ -3,6 +3,9 @@ package chitti.task;
 import java.time.LocalDateTime;
 import chitti.util.DateTimeUtil;
 
+/**
+ * Task with a due date, optionally including a time component.
+ */
 public class Deadline extends Task {
     protected LocalDateTime dateTime;
     protected boolean hasTime;
@@ -26,10 +29,12 @@ public class Deadline extends Task {
         this.hasTime = hasTime;
     }
 
+    /** Returns the due date/time. */
     public LocalDateTime getDateTime() {
         return this.dateTime;
     }
 
+    /** Returns true if the parsed input included a time component. */
     public boolean hasTimeComponent() {
         return this.hasTime;
     }

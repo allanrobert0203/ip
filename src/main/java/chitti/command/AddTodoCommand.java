@@ -6,6 +6,9 @@ import chitti.task.TaskList;
 import chitti.task.ToDo;
 import chitti.ui.Ui;
 
+/**
+ * Adds a new ToDo task.
+ */
 public class AddTodoCommand extends Command {
     private final String description;
 

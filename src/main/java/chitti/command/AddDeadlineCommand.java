@@ -6,6 +6,9 @@ import chitti.task.Deadline;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Adds a new Deadline task parsed from "<desc> /by <date>".
+ */
 public class AddDeadlineCommand extends Command {
 
     private final String rest;
