@@ -9,6 +9,9 @@ import chitti.task.TaskList;
 import chitti.ui.Ui;
 import chitti.util.DateTimeUtil;
 
+/**
+ * Lists all tasks that fall on a given date.
+ */
 public class OnDateCommand extends Command {
 
     private final String dateStr;
@@ -40,7 +43,7 @@ public class OnDateCommand extends Command {
                 }
             } else if (t instanceof Event) {
                 Event event = (Event) t;
-                if (event.startDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate()) || event.endDateTime.toLocalDate().equals(parsed.dateTime.toLocalDate())) {
+                if (event.getStartDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate()) || event.getEndDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
                     int order = i + 1;
                     System.out.println(order + ". " + event.toString());
                     any = true;

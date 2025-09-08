@@ -4,6 +4,9 @@ import chitti.storage.Storage;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Exits the application after saving.
+ */
 public class ExitCommand extends Command {
 
     @Override
