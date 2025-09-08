@@ -6,6 +6,9 @@ import chitti.task.Task;
 import chitti.task.TaskList;
 import chitti.ui.Ui;
 
+/**
+ * Deletes a task by index (1-based).
+ */
 public class DeleteCommand extends Command {
 
     private final String arg;

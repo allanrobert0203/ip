@@ -2,7 +2,7 @@ package chitti.task;
 
 public class Task {
     public String description;
-    boolean isDone;
+    public boolean isDone;
 
     public Task (String description) {
         this.description = description;
@@ -23,6 +23,10 @@ public class Task {
 
     public boolean isMarked() {
         return this.isDone;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
     @Override
