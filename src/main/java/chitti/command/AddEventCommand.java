@@ -7,7 +7,7 @@ import chitti.task.TaskList;
 import chitti.ui.Ui;
 
 /**
- * Adds a new Event task parsed from "<desc> /from <start> /to <end>".
+ * Adds a new Event task parsed from "&lt;desc&gt; /from &lt;start&gt; /to &lt;end&gt;".
  */
 public class AddEventCommand extends Command {
 
@@ -20,13 +20,15 @@ public class AddEventCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws Exception {
         if (!rest.contains(" /from ") || !rest.contains(" /to ")) {
-            throw new ChittiException("Missing '/from' or '/to' keyword. Use the following format: event <description> /from <time> /to <time>");
+            throw new ChittiException("Missing '/from' or '/to' keyword. "
+                    + "Use the following format: event <description> /from <time> /to <time>");
         }
 
         String[] parts = rest.split(" /from | /to ");
 
         if (parts.length < 3) {
-            throw new ChittiException("Invalid format. Use the following format: event <description> /from <time> /to <time>");
+            throw new ChittiException("Invalid format. "
+                    + "Use the following format: event <description> /from <time> /to <time>");
         }
 
         String description = parts[0].trim();
@@ -38,7 +40,8 @@ public class AddEventCommand extends Command {
         }
 
         if (from.isEmpty() || to.isEmpty()) {
-            throw new ChittiException("Start and end times cannot be empty. Usage: event <description> /from <time> /to <time>");
+            throw new ChittiException("Start and end times cannot be empty. "
+                    + "Usage: event <description> /from <time> /to <time>");
         }
 
         Event newEvent = new Event(description, from, to);
@@ -49,5 +52,3 @@ public class AddEventCommand extends Command {
         storage.save(tasks.getTasks());
     }
 }
-
-

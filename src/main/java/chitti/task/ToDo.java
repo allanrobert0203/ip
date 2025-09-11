@@ -5,7 +5,7 @@ package chitti.task;
  */
 public class ToDo extends Task {
 
-    public ToDo (String description) {
+    public ToDo(String description) {
         super(description);
     }
 

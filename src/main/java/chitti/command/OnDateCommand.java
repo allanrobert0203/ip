@@ -25,7 +25,8 @@ public class OnDateCommand extends Command {
         DateTimeUtil.ParsedDateTime parsed = DateTimeUtil.tryParse(dateStr);
 
         if (parsed == null) {
-            throw new ChittiException("Could not understand the date. Try formats like yyyy-MM-dd or d/M/yyyy");
+            throw new ChittiException("Could not understand the date."
+                    + "Try formats like yyyy-MM-dd or d/M/yyyy");
         }
 
         System.out.println("Tasks on " + DateTimeUtil.formatForDisplay(parsed.dateTime, false) + ":");
@@ -43,7 +44,8 @@ public class OnDateCommand extends Command {
                 }
             } else if (t instanceof Event) {
                 Event event = (Event) t;
-                if (event.getStartDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate()) || event.getEndDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
+                if (event.getStartDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())
+                        || event.getEndDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
                     int order = i + 1;
                     System.out.println(order + ". " + event.toString());
                     any = true;

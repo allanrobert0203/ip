@@ -1,6 +1,7 @@
 package chitti.task;
 
 import java.time.LocalDateTime;
+
 import chitti.util.DateTimeUtil;
 
 /**
@@ -10,6 +11,13 @@ public class Deadline extends Task {
     protected LocalDateTime dateTime;
     protected boolean hasTime;
 
+    /**
+     * Constructs a Deadline with the given description and date string.
+     * If parsing fails, defaults to the current date at start of day without time component.
+     *
+     * @param description the task description
+     * @param date the date string to parse
+     */
     public Deadline(String description, String date) {
         super(description);
         DateTimeUtil.ParsedDateTime parsed = DateTimeUtil.tryParse(date);
@@ -23,6 +31,13 @@ public class Deadline extends Task {
         }
     }
 
+    /**
+     * Constructs a Deadline with the given description and explicit date/time values.
+     *
+     * @param description the task description
+     * @param dateTime the due date and time
+     * @param hasTime whether the due date includes a time component
+     */
     public Deadline(String description, LocalDateTime dateTime, boolean hasTime) {
         super(description);
         this.dateTime = dateTime;
