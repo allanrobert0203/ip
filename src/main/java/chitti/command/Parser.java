@@ -29,15 +29,18 @@ public class Parser {
         } else if (input.startsWith("unmark ")) {
             return new UnmarkCommand(input.substring(7));
         } else if (input.equals("todo")) {
-            throw new ChittiException("The description of a todo cannot be empty. Use the following format: todo <description>");
+            throw new ChittiException("The description of a todo cannot be empty. "
+                    + "Use the following format: todo <description>");
         } else if (input.startsWith("todo ")) {
             return new AddTodoCommand(input.substring(5));
         } else if (input.equals("deadline")) {
-            throw new ChittiException("The description of a deadline cannot be empty. Use the following format: deadline <description> /by <duedate>");
+            throw new ChittiException("The description of a deadline cannot be empty. "
+                    + "Use the following format: deadline <description> /by <duedate>");
         } else if (input.startsWith("deadline ")) {
             return new AddDeadlineCommand(input.substring(9));
         } else if (input.equals("event")) {
-            throw new ChittiException("The description of an event cannot be empty. Use the following format: event <description> /from <time> /to <time>");
+            throw new ChittiException("The description of an event cannot be empty. "
+                    + "Use the following format: event <description> /from <time> /to <time>");
         } else if (input.startsWith("event ")) {
             return new AddEventCommand(input.substring(6));
         } else if (input.startsWith("delete ")) {

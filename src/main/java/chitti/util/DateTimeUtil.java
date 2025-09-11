@@ -17,6 +17,12 @@ public class DateTimeUtil {
         public final LocalDateTime dateTime;
         public final boolean hasTime;
 
+        /**
+         * Constructs a ParsedDateTime object with the given date/time and time presence flag.
+         *
+         * @param dateTime the parsed date and time
+         * @param hasTime whether the parsed string included time information
+         */
         public ParsedDateTime(LocalDateTime dateTime, boolean hasTime) {
             this.dateTime = dateTime;
             this.hasTime = hasTime;
@@ -44,30 +50,37 @@ public class DateTimeUtil {
         try {
             LocalDateTime dt = LocalDateTime.parse(trimmed, DATE_TIME_ISO_COMPACT);
             return new ParsedDateTime(dt, true);
-        } catch (DateTimeParseException ignored) {
+        } catch (DateTimeParseException e) {
+            // Continue to next parsing format
         }
         // d/M/yyyy HHmm
         try {
             LocalDateTime dt = LocalDateTime.parse(trimmed, DATE_TIME_SLASH_COMPACT);
             return new ParsedDateTime(dt, true);
-        } catch (DateTimeParseException ignored) {
+        } catch (DateTimeParseException e) {
+            // Continue to next parsing format
         }
         // Try date-only patterns -> no time component
         try {
             LocalDate d = LocalDate.parse(trimmed, DATE_ONLY_ISO);
             return new ParsedDateTime(d.atStartOfDay(), false);
-        } catch (DateTimeParseException ignored) {
+        } catch (DateTimeParseException e) {
+            // Continue to next parsing format
         }
         try {
             LocalDate d = LocalDate.parse(trimmed, DATE_ONLY_SLASH);
             return new ParsedDateTime(d.atStartOfDay(), false);
-        } catch (DateTimeParseException ignored) {
+        } catch (DateTimeParseException e) {
+            // All parsing attempts failed
         }
         return null;
     }
 
     /**
      * Formats a date/time for display, e.g., "Oct 15 2019, 6pm" or "Oct 15 2019".
+     * @param dateTime the date and time to format
+     * @param hasTime whether to include time in the formatted string
+     * @return formatted date/time string
      */
     public static String formatForDisplay(LocalDateTime dateTime, boolean hasTime) {
         if (dateTime == null) {
@@ -87,6 +100,9 @@ public class DateTimeUtil {
 
     /**
      * Formats a date/time for storage: yyyy-MM-dd or yyyy-MM-dd HHmm when time is present.
+     * @param dateTime the date and time to format
+     * @param hasTime whether to include time in the formatted string
+     * @return formatted date/time string for storage
      */
     public static String formatForStorage(LocalDateTime dateTime, boolean hasTime) {
         if (dateTime == null) {
@@ -98,5 +114,3 @@ public class DateTimeUtil {
         return dateTime.format(DATE_ONLY_ISO);
     }
 }
-
-

@@ -1,14 +1,15 @@
 package chitti.command;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
 import chitti.exception.ChittiException;
 import chitti.storage.Storage;
-import chitti.task.Task;
 import chitti.task.TaskList;
 import chitti.task.ToDo;
 import chitti.ui.Ui;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DeleteCommandTest {
 

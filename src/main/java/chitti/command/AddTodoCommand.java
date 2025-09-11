@@ -20,7 +20,8 @@ public class AddTodoCommand extends Command {
 
     public void execute(TaskList tasks, Ui ui, Storage storage) throws Exception {
         if (description.isEmpty()) {
-            throw new ChittiException("The description of a todo cannot be empty. Use the following format: todo <description>");
+            throw new ChittiException("The description of a todo cannot be empty. "
+                    + "Use the following format: todo <description>");
         }
 
         ToDo newToDo = new ToDo(description);

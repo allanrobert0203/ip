@@ -5,9 +5,14 @@ package chitti.task;
  */
 public class Task {
     private String description;
-    boolean isDone;
+    private boolean isDone;
 
-    public Task (String description) {
+    /**
+     * Constructs a Task with the given description.
+     *
+     * @param description the task description
+     */
+    public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
@@ -34,6 +39,11 @@ public class Task {
         return this.isDone;
     }
 
+    /**
+     * Returns the description of this task.
+     *
+     * @return the task description
+     */
     public String getDescription() {
         return this.description;
     }
