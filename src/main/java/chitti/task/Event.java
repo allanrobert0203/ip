@@ -82,7 +82,7 @@ public class Event extends Task {
      *
      * @return true if start has time component, false otherwise
      */
-    public boolean ishasStartTime() {
+    public boolean hasStartTime() {
         return this.startHasTime;
     }
 
@@ -91,7 +91,7 @@ public class Event extends Task {
      *
      * @return true if end has time component, false otherwise
      */
-    public boolean ishasEndTime() {
+    public boolean hasEndTime() {
         return this.endHasTime;
     }
 

@@ -5,7 +5,9 @@ import chitti.command.Parser;
 import chitti.exception.ChittiException;
 import chitti.storage.Storage;
 import chitti.task.TaskList;
+import chitti.ui.ChatApp;
 import chitti.ui.Ui;
+import javafx.application.Application;
 
 /**
  * Main application entry point that wires together UI, storage, and command handling.
@@ -55,12 +57,13 @@ public class Chitti {
         }
     }
 
+
     /**
      * Program entrypoint.
      *
      * @param args CLI arguments (unused)
      */
     public static void main(String[] args) {
-        new Chitti("./data/chitti.txt").run();
+        Application.launch(ChatApp.class, args);
     }
 }

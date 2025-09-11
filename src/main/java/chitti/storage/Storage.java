@@ -88,10 +88,10 @@ public class Storage {
             return String.join(" | ", "D", status, d.getDescription(), stored, hasTimeFlag);
         } else if (task instanceof Event) {
             Event e = (Event) task;
-            String startStored = DateTimeUtil.formatForStorage(e.getStartDateTime(), e.ishasStartTime());
-            String endStored = DateTimeUtil.formatForStorage(e.getEndDateTime(), e.ishasEndTime());
-            String startFlag = e.ishasStartTime() ? "1" : "0";
-            String endFlag = e.ishasEndTime() ? "1" : "0";
+            String startStored = DateTimeUtil.formatForStorage(e.getStartDateTime(), e.hasStartTime());
+            String endStored = DateTimeUtil.formatForStorage(e.getEndDateTime(), e.hasEndTime());
+            String startFlag = e.hasStartTime() ? "1" : "0";
+            String endFlag = e.hasEndTime() ? "1" : "0";
             return String.join(" | ", "E", status, e.getDescription(), startStored, startFlag, endStored, endFlag);
         } else {
             return String.join(" | ", "T", status, task.getDescription());
