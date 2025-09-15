@@ -5,12 +5,13 @@ import chitti.command.Parser;
 import chitti.exception.ChittiException;
 import chitti.storage.Storage;
 import chitti.task.TaskList;
-import chitti.ui.ChatApp;
 import chitti.ui.Ui;
-import javafx.application.Application;
 
 /**
- * Main application entry point that wires together UI, storage, and command handling.
+ * Main application class for Chitti the robot task manager.
+ * This class serves as the central component that coordinates between
+ * the user interface, task storage, and command execution.
+ * It initializes the application components and manages the main execution loop.
  */
 public class Chitti {
 
@@ -19,9 +20,11 @@ public class Chitti {
     private final Ui ui;
 
     /**
-     * Constructs the application with a backing storage file.
+     * Constructs a new Chitti application instance with the specified storage file path.
+     * Initializes the user interface, storage system, and loads existing tasks from storage.
+     * If loading fails, starts with an empty task list and displays an error message.
      *
-     * @param filePath relative path to the storage file
+     * @param filePath the relative path to the storage file where tasks are persisted
      */
     public Chitti(String filePath) {
         this.ui = new Ui();
@@ -35,8 +38,19 @@ public class Chitti {
     }
 
     /**
-     * Runs the main event loop: reads user commands, parses them into commands,
-     * executes them, and exits when requested.
+     * Starts and runs the main application loop for Chitti.
+     * Displays a welcome message and continuously processes user commands
+     * until an exit command is received. Each command is parsed and executed,
+     * with appropriate error handling for any exceptions that may occur.
+     * The loop continues until a command that signals exit is executed.
+     *
+     * The execution flow:
+     * 1. Display welcome message
+     * 2. Read user input
+     * 3. Parse input into a command
+     * 4. Execute the command
+     * 5. Handle any errors or exceptions
+     * 6. Repeat until exit command is received
      */
     public void run() {
         ui.welcome();
@@ -55,15 +69,5 @@ public class Chitti {
             }
             ui.showLine();
         }
-    }
-
-
-    /**
-     * Program entrypoint.
-     *
-     * @param args CLI arguments (unused)
-     */
-    public static void main(String[] args) {
-        Application.launch(ChatApp.class, args);
     }
 }
