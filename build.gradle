@@ -53,7 +53,7 @@ test {
 }
 
 application {
-    mainClass.set("chitti.Chitti")
+    mainClass.set("chitti.ui.Launcher")
 }
 
 shadowJar {
