@@ -9,6 +9,7 @@ import chitti.exception.ChittiException;
 import chitti.storage.Storage;
 import chitti.task.TaskList;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -38,6 +39,7 @@ public class ChatApp extends Application {
     private TextField inputField;
     private ImageView botAvatar;
     private ImageView userAvatar;
+    private ScrollPane scrollPane;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -51,10 +53,17 @@ public class ChatApp extends Application {
 
         this.messages = new VBox(8);
         this.messages.setPadding(new Insets(8));
+        this.messages.setFillWidth(true);
 
-        ScrollPane scrollPane = new ScrollPane(this.messages);
+        this.scrollPane = new ScrollPane(this.messages);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Show vertical scrollbar when needed
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Never show horizontal scrollbar
+        scrollPane.setPadding(new Insets(0));
+
+        // CSS styling for better scrollbar visibility
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
 
         this.inputField = new TextField();
         this.inputField.setPromptText("Enter command (e.g., todo read book)");
@@ -66,6 +75,7 @@ public class ChatApp extends Application {
 
         HBox inputBar = new HBox(8);
         inputBar.setPadding(new Insets(8));
+        inputBar.setAlignment(Pos.CENTER_LEFT);
         this.userAvatar = loadAvatar("/images/DaUser.png", 24);
         this.botAvatar = loadAvatar("/images/DaChitti.png", 24);
         HBox.setHgrow(this.inputField, Priority.ALWAYS);
@@ -74,15 +84,18 @@ public class ChatApp extends Application {
         BorderPane root = new BorderPane();
         root.setCenter(scrollPane);
         root.setBottom(inputBar);
-        BorderPane.setMargin(scrollPane, new Insets(8));
+        BorderPane.setMargin(scrollPane, new Insets(0));
 
         Scene scene = new Scene(root, 640, 480);
         stage.setTitle("Chitti Chatbot");
         stage.setScene(scene);
         stage.show();
 
-        appendBot("Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte."
-                + "Type commands like list, todo, deadline, event, on, delete, mark, unmark, bye.");
+        appendBot("Hello! I'm Chitti the robot. Speed 1 terahertz, memory 1 zigabyte. " +
+                "Type commands like list, todo, deadline, event, on, delete, mark, unmark, bye.");
+
+        // Initial scroll to bottom
+        scrollToBottom();
     }
 
     private void handleSend(Stage stage) {
@@ -118,6 +131,9 @@ public class ChatApp extends Application {
             appendBot(botOut);
         }
 
+        // Scroll to the bottom after adding new messages
+        scrollToBottom();
+
         if (exit) {
             stage.close();
         }
@@ -126,22 +142,33 @@ public class ChatApp extends Application {
     private void appendUser(String message) {
         HBox row = new HBox(8);
         row.setAlignment(Pos.TOP_RIGHT);
+        row.setPadding(new Insets(4, 8, 4, 8));
+
         Label text = new Label(message);
         text.setWrapText(true);
-        text.maxWidthProperty().bind(this.messages.widthProperty().subtract(80));
+        text.setMaxWidth(this.messages.getWidth() - 100); // Better width calculation
+        text.setStyle("-fx-background-color: #000000; -fx-padding: 8px; -fx-background-radius: 12px;");
+
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        row.getChildren().addAll(spacer, text, loadAvatar("/images/DaUser.png", 24));
+
+        ImageView avatar = loadAvatar("/images/DaUser.png", 32);
+        row.getChildren().addAll(spacer, text, avatar);
         this.messages.getChildren().add(row);
     }
 
     private void appendBot(String message) {
         HBox row = new HBox(8);
-        row.getChildren().add(loadAvatar("/images/DaChitti.png", 24));
+        row.setAlignment(Pos.TOP_LEFT);
+        row.setPadding(new Insets(4, 8, 4, 8));
+
+        ImageView avatar = loadAvatar("/images/DaChitti.png", 32);
         Label text = new Label(message);
         text.setWrapText(true);
-        text.maxWidthProperty().bind(this.messages.widthProperty().subtract(80));
-        row.getChildren().add(text);
+        text.setMaxWidth(this.messages.getWidth() - 100); // Better width calculation
+        text.setStyle("-fx-background-color: black; -fx-padding: 8px; -fx-background-radius: 12px;");
+
+        row.getChildren().addAll(avatar, text);
         this.messages.getChildren().add(row);
     }
 
@@ -151,15 +178,31 @@ public class ChatApp extends Application {
             ImageView view = new ImageView(img);
             view.setFitHeight(size);
             view.setFitWidth(size);
+            view.setPreserveRatio(true);
             return view;
         } catch (Exception e) {
-            return new ImageView();
+            // Return a placeholder if image fails to load
+            ImageView placeholder = new ImageView();
+            placeholder.setFitHeight(size);
+            placeholder.setFitWidth(size);
+            placeholder.setStyle("-fx-background-color: lightgray; -fx-border-radius: 50%;");
+            return placeholder;
         }
+    }
+
+    /**
+     * Scrolls the scroll pane to the bottom automatically.
+     * This ensures the latest messages are always visible.
+     */
+    private void scrollToBottom() {
+        Platform.runLater(() -> {
+            scrollPane.setVvalue(1.0); // Scroll to bottom
+            scrollPane.applyCss();
+            scrollPane.layout();
+        });
     }
 
     public static void main(String[] args) {
         launch(args);
     }
 }
-
-
