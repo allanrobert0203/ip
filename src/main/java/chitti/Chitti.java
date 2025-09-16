@@ -35,6 +35,8 @@ public class Chitti {
             this.ui.showError("Failed to load tasks from file. Starting with an empty list.");
             this.tasks = new TaskList();
         }
+
+        assert this.tasks != null : "TaskList must be properly initialized";
     }
 
     /**
@@ -55,13 +57,18 @@ public class Chitti {
     public void run() {
         ui.welcome();
         boolean isExit = false;
+
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
                 ui.showLine();
+
                 Command c = Parser.parse(fullCommand);
+                assert c != null : "Parsed command should not be null";
+
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();
+
             } catch (ChittiException e) {
                 ui.showError(e.getMessage());
             } catch (Exception e) {
