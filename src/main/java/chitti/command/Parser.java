@@ -20,39 +20,80 @@ public class Parser {
             throw new ChittiException("Empty command.");
         }
 
+        return parseNonEmptyInput(input);
+    }
+
+    /**
+     * Parses non-empty input strings into specific commands.
+     *
+     * @param input the trimmed, non-empty user input
+     * @return a concrete Command to execute
+     * @throws ChittiException if the command is unknown or invalid
+     */
+    private static Command parseNonEmptyInput(String input) throws ChittiException {
         if (input.equals("bye")) {
             return new ExitCommand();
-        } else if (input.equals("list")) {
+        }
+
+        if (input.equals("list")) {
             return new ListCommand();
-        } else if (input.startsWith("mark ")) {
-            return new MarkCommand(input.substring(5));
-        } else if (input.startsWith("unmark ")) {
-            return new UnmarkCommand(input.substring(7));
-        } else if (input.equals("todo")) {
+        }
+
+        if (input.startsWith("mark ")) {
+            String argument = input.substring(5);
+            return new MarkCommand(argument);
+        }
+
+        if (input.startsWith("unmark ")) {
+            String argument = input.substring(7);
+            return new UnmarkCommand(argument);
+        }
+
+        if (input.startsWith("todo ")) {
+            String argument = input.substring(5);
+            return new AddTodoCommand(argument);
+        }
+
+        if (input.equals("todo")) {
             throw new ChittiException("The description of a todo cannot be empty. "
                     + "Use the following format: todo <description>");
-        } else if (input.startsWith("todo ")) {
-            return new AddTodoCommand(input.substring(5));
-        } else if (input.equals("deadline")) {
+        }
+
+        if (input.startsWith("deadline ")) {
+            String argument = input.substring(9);
+            return new AddDeadlineCommand(argument);
+        }
+
+        if (input.equals("deadline")) {
             throw new ChittiException("The description of a deadline cannot be empty. "
                     + "Use the following format: deadline <description> /by <duedate>");
-        } else if (input.startsWith("deadline ")) {
-            return new AddDeadlineCommand(input.substring(9));
-        } else if (input.equals("event")) {
+        }
+
+        if (input.startsWith("event ")) {
+            String argument = input.substring(6);
+            return new AddEventCommand(argument);
+        }
+
+        if (input.equals("event")) {
             throw new ChittiException("The description of an event cannot be empty. "
                     + "Use the following format: event <description> /from <time> /to <time>");
-        } else if (input.startsWith("event ")) {
-            return new AddEventCommand(input.substring(6));
-        } else if (input.startsWith("delete ")) {
-            return new DeleteCommand(input.substring(7));
-        } else if (input.startsWith("on ")) {
-            return new OnDateCommand(input.substring(3));
-        } else if (input.startsWith("find ")) {
-            return new FindCommand(input.substring(5));
-        } else {
-            throw new ChittiException("I'm sorry, but I don't know what that means 😭");
         }
+
+        if (input.startsWith("delete ")) {
+            String argument = input.substring(7);
+            return new DeleteCommand(argument);
+        }
+
+        if (input.startsWith("on ")) {
+            String argument = input.substring(3);
+            return new OnDateCommand(argument);
+        }
+
+        if (input.startsWith("find ")) {
+            String argument = input.substring(5);
+            return new FindCommand(argument);
+        }
+
+        throw new ChittiException("I'm sorry, but I don't know what that means 😭");
     }
 }
-
-

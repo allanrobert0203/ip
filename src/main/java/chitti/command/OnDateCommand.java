@@ -9,6 +9,8 @@ import chitti.task.TaskList;
 import chitti.ui.Ui;
 import chitti.util.DateTimeUtil;
 
+import java.time.LocalDate;
+
 /**
  * Lists all tasks that fall on a given date.
  */
@@ -29,33 +31,55 @@ public class OnDateCommand extends Command {
                     + "Try formats like yyyy-MM-dd or d/M/yyyy");
         }
 
+        LocalDate targetDate = parsed.dateTime.toLocalDate();
         System.out.println("Tasks on " + DateTimeUtil.formatForDisplay(parsed.dateTime, false) + ":");
-        boolean any = false;
 
-        for (int i = 0; i < tasks.size(); i++) {
-            Task t = tasks.get(i);
+        boolean hasMatchingTasks = findAndDisplayMatchingTasks(tasks, targetDate);
 
-            if (t instanceof Deadline) {
-                Deadline deadline = (Deadline) t;
-                if (deadline.getDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
-                    int order = i + 1;
-                    System.out.println(order + ". " + deadline.toString());
-                    any = true;
-                }
-            } else if (t instanceof Event) {
-                Event event = (Event) t;
-                if (event.getStartDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())
-                        || event.getEndDateTime().toLocalDate().equals(parsed.dateTime.toLocalDate())) {
-                    int order = i + 1;
-                    System.out.println(order + ". " + event.toString());
-                    any = true;
-                }
-            }
-        }
-        if (!any) {
+        if (!hasMatchingTasks) {
             System.out.println("No tasks found on this date.");
         }
     }
+
+    /**
+     * Finds and displays tasks that occur on the target date.
+     *
+     * @param tasks the task list to search through
+     * @param targetDate the date to match tasks against
+     * @return true if any matching tasks were found, false otherwise
+     */
+    private boolean findAndDisplayMatchingTasks(TaskList tasks, LocalDate targetDate) {
+        boolean foundAny = false;
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+
+            if (isTaskOnDate(task, targetDate)) {
+                int displayNumber = i + 1;
+                System.out.println(displayNumber + ". " + task.toString());
+                foundAny = true;
+            }
+        }
+
+        return foundAny;
+    }
+
+    /**
+     * Checks if a task occurs on the specified date.
+     *
+     * @param task the task to check
+     * @param targetDate the date to check against
+     * @return true if the task occurs on the target date, false otherwise
+     */
+    private boolean isTaskOnDate(Task task, LocalDate targetDate) {
+        if (task instanceof Deadline) {
+            Deadline deadline = (Deadline) task;
+            return deadline.getDateTime().toLocalDate().equals(targetDate);
+        } else if (task instanceof Event) {
+            Event event = (Event) task;
+            return event.getStartDateTime().toLocalDate().equals(targetDate)
+                    || event.getEndDateTime().toLocalDate().equals(targetDate);
+        }
+        return false;
+    }
 }
-
-

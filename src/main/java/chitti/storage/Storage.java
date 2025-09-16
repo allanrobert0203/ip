@@ -38,18 +38,21 @@ public class Storage {
     public ArrayList<Task> load() throws IOException {
         ensureFileExists();
         ArrayList<Task> tasks = new ArrayList<>();
+
         try (Scanner scanner = new Scanner(this.file)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().trim();
                 if (line.isEmpty()) {
                     continue;
                 }
+
                 Task task = parseLineToTask(line);
                 if (task != null) {
                     tasks.add(task);
                 }
             }
         }
+
         assert tasks != null : "Loaded task list should never be null";
         return tasks;
     }
@@ -62,6 +65,7 @@ public class Storage {
     public void save(List<Task> tasks) throws IOException {
         assert tasks != null : "Tasks list to save must not be null";
         ensureFileExists();
+
         try (FileWriter writer = new FileWriter(this.file)) {
             for (Task task : tasks) {
                 writer.write(serializeTask(task));
@@ -75,6 +79,7 @@ public class Storage {
         if (parent != null && !parent.exists()) {
             parent.mkdirs();
         }
+
         if (!this.file.exists()) {
             this.file.createNewFile();
         }
@@ -83,6 +88,7 @@ public class Storage {
     private String serializeTask(Task task) {
         assert task != null : "Task to serialize must not be null";
         String status = task.isMarked() ? "1" : "0";
+
         if (task instanceof ToDo) {
             return String.join(" | ", "T", status, task.getDescription());
         } else if (task instanceof Deadline) {
@@ -108,23 +114,28 @@ public class Storage {
         if (parts.length < 3) {
             return null;
         }
+
         String type = parts[0];
         boolean done = "1".equals(parts[1]);
         String description = parts[2];
         Task task;
+
         switch (type) {
         case "T":
             task = new ToDo(description);
             break;
+
         case "D":
             if (parts.length < 4) {
                 return null;
             }
+
             // New format: D | status | desc | storedDateOrDateTime | hasTimeFlag
             if (parts.length >= 5) {
                 String stored = parts[3];
                 String flag = parts[4];
                 DateTimeUtil.ParsedDateTime parsed = DateTimeUtil.tryParse(stored);
+
                 if (parsed != null) {
                     boolean hasTime = "1".equals(flag) || parsed.hasTime;
                     task = new Deadline(description, parsed.dateTime, hasTime);
@@ -136,10 +147,12 @@ public class Storage {
                 task = new Deadline(description, parts[3]);
             }
             break;
+
         case "E":
             if (parts.length < 5) {
                 return null;
             }
+
             // New format: E | status | desc | startStored | startFlag | endStored | endFlag
             if (parts.length >= 7) {
                 String startStored = parts[3];
@@ -148,6 +161,7 @@ public class Storage {
                 String endFlag = parts[6];
                 DateTimeUtil.ParsedDateTime ps = DateTimeUtil.tryParse(startStored);
                 DateTimeUtil.ParsedDateTime pe = DateTimeUtil.tryParse(endStored);
+
                 if (ps != null && pe != null) {
                     task = new Event(description, ps.dateTime, "1".equals(startFlag) || ps.hasTime,
                             pe.dateTime, "1".equals(endFlag) || pe.hasTime);
@@ -159,12 +173,15 @@ public class Storage {
                 task = new Event(description, parts[3], parts[4]);
             }
             break;
+
         default:
             return null;
         }
+
         if (done) {
             task.markAsDone();
         }
+
         return task;
     }
 }
