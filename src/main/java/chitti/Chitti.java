@@ -29,6 +29,7 @@ public class Chitti {
     public Chitti(String filePath) {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
+
         try {
             this.tasks = new TaskList(this.storage.load());
         } catch (Exception e) {
@@ -67,6 +68,7 @@ public class Chitti {
             } catch (Exception e) {
                 ui.showError("Oops! Something unexpected went wrong. Please try again.");
             }
+
             ui.showLine();
         }
     }
