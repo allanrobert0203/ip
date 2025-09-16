@@ -26,6 +26,7 @@ public class Storage {
      * @param relativePath path to the data file (relative or absolute)
      */
     public Storage(String relativePath) {
+        assert relativePath != null && !relativePath.trim().isEmpty() : "File path must not be null or empty";
         this.file = new File(relativePath);
     }
 
@@ -49,6 +50,7 @@ public class Storage {
                 }
             }
         }
+        assert tasks != null : "Loaded task list should never be null";
         return tasks;
     }
 
@@ -58,6 +60,7 @@ public class Storage {
      * @throws IOException if file IO fails
      */
     public void save(List<Task> tasks) throws IOException {
+        assert tasks != null : "Tasks list to save must not be null";
         ensureFileExists();
         try (FileWriter writer = new FileWriter(this.file)) {
             for (Task task : tasks) {
@@ -78,6 +81,7 @@ public class Storage {
     }
 
     private String serializeTask(Task task) {
+        assert task != null : "Task to serialize must not be null";
         String status = task.isMarked() ? "1" : "0";
         if (task instanceof ToDo) {
             return String.join(" | ", "T", status, task.getDescription());
@@ -99,6 +103,7 @@ public class Storage {
     }
 
     private Task parseLineToTask(String line) {
+        assert line != null : "Input line for parsing must not be null";
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
             return null;
