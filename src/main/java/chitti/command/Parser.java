@@ -39,6 +39,10 @@ public class Parser {
             return new ListCommand();
         }
 
+        if (input.equals("findduplicates") || input.equals("checkduplicates")) {
+            return new FindDuplicatesCommand();
+        }
+
         if (input.startsWith("mark ")) {
             String argument = input.substring(5);
             return new MarkCommand(argument);

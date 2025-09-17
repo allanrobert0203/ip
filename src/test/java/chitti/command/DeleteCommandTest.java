@@ -3,6 +3,7 @@ package chitti.command;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import chitti.exception.DuplicateTaskException;
 import org.junit.jupiter.api.Test;
 
 import chitti.exception.ChittiException;
@@ -28,8 +29,7 @@ class DeleteCommandTest {
     }
 
     @Test
-    void testDeleteInvalidTaskNumber() {
-
+    void testDeleteInvalidTaskNumber() throws DuplicateTaskException {
         TaskList tasks = new TaskList();
         Ui ui = new Ui();
         Storage storage = new Storage("test.txt");
@@ -41,13 +41,12 @@ class DeleteCommandTest {
             command.execute(tasks, ui, storage);
         });
 
-        assertEquals("chitti.task.Task 2 doesn't exist! You have 1 tasks.", exception.getMessage());
+        assertEquals("Task 2 doesn't exist! You have 1 tasks.", exception.getMessage());
         assertEquals(1, tasks.size()); // Task should still be there
     }
 
     @Test
-    void testDeleteNegativeTaskNumber() {
-
+    void testDeleteNegativeTaskNumber() throws DuplicateTaskException {
         TaskList tasks = new TaskList();
         Ui ui = new Ui();
         Storage storage = new Storage("test.txt");
@@ -59,13 +58,12 @@ class DeleteCommandTest {
             command.execute(tasks, ui, storage);
         });
 
-        assertEquals("chitti.task.Task 0 doesn't exist! You have 1 tasks.", exception.getMessage());
+        assertEquals("Task 0 doesn't exist! You have 1 tasks.", exception.getMessage());
         assertEquals(1, tasks.size());
     }
 
     @Test
     void testDeleteTaskWithSpacesInInput() throws Exception {
-
         TaskList tasks = new TaskList();
         Ui ui = new Ui();
         Storage storage = new Storage("test.txt");
@@ -76,5 +74,39 @@ class DeleteCommandTest {
         command.execute(tasks, ui, storage);
 
         assertEquals(0, tasks.size());
+    }
+
+    @Test
+    void testDeleteNonNumericInput() throws DuplicateTaskException {
+        TaskList tasks = new TaskList();
+        Ui ui = new Ui();
+        Storage storage = new Storage("test.txt");
+
+        tasks.add(new ToDo("Test task"));
+        DeleteCommand command = new DeleteCommand("abc");
+
+        Exception exception = assertThrows(ChittiException.class, () -> {
+            command.execute(tasks, ui, storage);
+        });
+
+        assertEquals("Please provide a valid task number!", exception.getMessage());
+        assertEquals(1, tasks.size());
+    }
+
+    @Test
+    void testDeleteEmptyInput() throws DuplicateTaskException {
+        TaskList tasks = new TaskList();
+        Ui ui = new Ui();
+        Storage storage = new Storage("test.txt");
+
+        tasks.add(new ToDo("Test task"));
+        DeleteCommand command = new DeleteCommand("");
+
+        Exception exception = assertThrows(ChittiException.class, () -> {
+            command.execute(tasks, ui, storage);
+        });
+
+        assertEquals("Please specify which task to delete! Usage: delete <task number>", exception.getMessage());
+        assertEquals(1, tasks.size());
     }
 }

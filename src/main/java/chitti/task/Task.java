@@ -1,5 +1,7 @@
 package chitti.task;
 
+import java.util.Objects;
+
 /**
  * Base type for all tasks managed by the app.
  */
@@ -46,6 +48,19 @@ public class Task {
      */
     public String getDescription() {
         return this.description;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Task task = (Task) obj;
+        return Objects.equals(description.toLowerCase(), task.description.toLowerCase());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description.toLowerCase());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package chitti.command;
 
 import chitti.exception.ChittiException;
+import chitti.exception.DuplicateTaskException;
 import chitti.storage.Storage;
 import chitti.task.Deadline;
 import chitti.task.TaskList;
@@ -44,10 +45,17 @@ public class AddDeadlineCommand extends Command {
         }
 
         Deadline newDeadline = new Deadline(description, due);
-        tasks.add(newDeadline);
-        System.out.println("Got it! I've added this task:");
-        System.out.println("\t" + newDeadline.toString());
-        System.out.println("Now you have " + tasks.size() + " task(s) in the list");
-        storage.save(tasks.getTasks());
+
+        try {
+            tasks.add(newDeadline);
+            storage.save(tasks.getTasks());
+            System.out.println("Got it! I've added this task:");
+            System.out.println("\t" + newDeadline.toString());
+            System.out.println("Now you have " + tasks.size() + " task(s) in the list");
+        } catch (DuplicateTaskException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Use 'list' to see all your existing tasks.");
+            System.out.println("Use 'findduplicates' to check for duplicate tasks.");
+        }
     }
 }

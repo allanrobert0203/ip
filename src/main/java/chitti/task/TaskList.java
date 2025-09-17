@@ -3,6 +3,8 @@ package chitti.task;
 import java.util.ArrayList;
 import java.util.List;
 
+import chitti.exception.DuplicateTaskException;
+
 /**
  * Mutable container for tasks with basic list operations.
  */
@@ -39,8 +41,19 @@ public class TaskList {
     }
 
     /** Adds a task to the end of the list. */
-    public void add(Task task) {
-        this.tasks.add(task);
+    public void add(Task task) throws DuplicateTaskException {
+        if (containsDuplicate(task)) {
+            throw new DuplicateTaskException("Oops! This task already exists in your list: " + task.getDescription());
+        }
+        tasks.add(task);
+    }
+
+    public boolean containsDuplicate(Task newTask) {
+        return tasks.stream().anyMatch(existingTask -> existingTask.equals(newTask));
+    }
+
+    public int countDuplicates(Task task) {
+        return (int) tasks.stream().filter(t -> t.equals(task)).count();
     }
 
     /** Removes and returns the task at the given index. */
