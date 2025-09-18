@@ -9,8 +9,6 @@ checkstyle {
     toolVersion = '11.0.1'
 }
 
-mainClassName = 'chitti.Chitti'
-
 repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }

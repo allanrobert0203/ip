@@ -11,9 +11,12 @@
          prefWidth="400.0"
          type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/17"
-         xmlns:fx="http://javafx.com/fxml/1">
+         xmlns:fx="http://javafx.com/fxml/1"
+         styleClass="dialog-box"> <!-- New root style class -->
+
     <children>
-        <Label fx:id="dialog" text="Label" wrapText="true" minHeight="-Infinity">
+        <Label fx:id="dialog" text="Label" wrapText="true" minHeight="-Infinity"
+               styleClass="label"> <!-- Vibrant user bubble -->
             <HBox.margin>
                 <Insets left="7.0" right="7.0" />
             </HBox.margin>
@@ -21,9 +24,13 @@
                 <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
             </padding>
         </Label>
-        <ImageView fx:id="displayPicture" fitHeight="99.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true" />
+
+        <ImageView fx:id="displayPicture" fitHeight="99.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true"
+                   styleClass="display-picture"/> <!-- Add style class -->
     </children>
+
     <padding>
         <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
     </padding>
 </fx:root>
+

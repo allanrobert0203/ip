@@ -81,7 +81,7 @@ Great job! I have marked this task as done:
   [D][X] Submit report (by: Dec 1 2023)
 ```
 
-## Unamrking Feature
+## Unmarking Feature
 1. Unmarking removes a specific task in your list that you have already marked
 if you accidentally marked it as down previously
 2. To mark a task, type in the following command:
@@ -120,7 +120,7 @@ Use 'findduplicates' to check for duplicate tasks.
 ```
 
 
-## Finding feauture
+## Finding feature
 1. This is to find your tasks with the help of a keyword
 2. To find a task, simply type in the following command:
 ```text
