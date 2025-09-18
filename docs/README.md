@@ -15,7 +15,7 @@ Designed for speed and simplicity, Chitti helps you manage your todos, deadlines
 1. A todo you will be adding when it's just a simple task that does not
 have any specific deadline
 2. To add a todo task, type in the following command:
-```declarative
+```text
 todo <description>
 ```
 
@@ -31,7 +31,7 @@ Now you have 1 task in the list.
 1. A deadline is considered as a task that has to be done within
 a certain time
 2. To add a deadline task, type in the following command:
-```declarative
+```text
 deadline <description> /by <DD-MM-YYYY>
 ```
 3. The expected output will be like this for example:
