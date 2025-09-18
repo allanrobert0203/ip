@@ -41,6 +41,16 @@ public class Chitti {
     }
 
     /**
+     * The main entry point for the Chitti application.
+     * Creates a new Chitti instance with the specified file path and starts the application.
+     *
+     * @param args command line arguments (not used)
+     */
+    public static void main(String[] args) {
+        new Chitti("data/tasks.txt").run();
+    }
+
+    /**
      * Starts and runs the main application loop for Chitti.
      * Displays a welcome message and continuously processes user commands
      * until an exit command is received. Each command is parsed and executed,
