@@ -1,6 +1,6 @@
 # Chitti User Guide
 
-![Screenshot of Chitti the chatbot](docs/Ui.png)
+![Screenshot of Chitti the chatbot](Ui.png)
 
 ## A brief intro on Chitti
 Chitti is your friendly, smart task-tracking assistant. 
