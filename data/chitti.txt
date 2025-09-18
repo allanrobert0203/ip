@@ -2,4 +2,4 @@ T | 0 | wash dishes
 D | 1 | do assignment | 2025-12-22 | 0
 E | 0 | career fair | 2025-09-09 | 0 | 2025-09-10 | 0
 T | 1 | do hw
-T | 1 | dry dishes
+T | 0 | dry dishes
