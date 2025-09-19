@@ -71,7 +71,7 @@ Here are the tasks in your list:
 ## Marking Feature
 1. Marking marks a specific task in your list as completed in order to
 get a picture of the number of tasks left to do
-2. To mark a task, type in the following command:
+2. To mark a task as done, type in the following command:
 ```text
 mark <task number>
 ```
@@ -84,7 +84,7 @@ Great job! I have marked this task as done:
 ## Unmarking Feature
 1. Unmarking removes a specific task in your list that you have already marked
 if you accidentally marked it as down previously
-2. To mark a task as done, type in the following command:
+2. To unmark a task as done, type in the following command:
 ```text
 unmark <task number>
 ```
