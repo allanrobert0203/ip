@@ -84,7 +84,7 @@ Great job! I have marked this task as done:
 ## Unmarking Feature
 1. Unmarking removes a specific task in your list that you have already marked
 if you accidentally marked it as down previously
-2. To mark a task, type in the following command:
+2. To mark a task as done, type in the following command:
 ```text
 unmark <task number>
 ```
