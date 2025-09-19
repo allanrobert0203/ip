@@ -121,7 +121,7 @@ Use 'findduplicates' to check for duplicate tasks.
 
 
 ## Finding feature
-1. This is to find your tasks with the help of a keyword
+1. This is to find your tasks with the help of a keyword in the task
 2. To find a task, simply type in the following command:
 ```text
 find <keyword that is within the task description>
