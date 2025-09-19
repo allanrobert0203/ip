@@ -140,3 +140,4 @@ in the following command:
 bye
 ```
 
+### Note: Have fun using my chatbot and get started with your tasks!
