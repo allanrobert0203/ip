@@ -69,7 +69,7 @@ Here are the tasks in your list:
 ```
 
 ## Marking Feature
-1. Marking marks a specific task in your list as completed so as to
+1. Marking marks a specific task in your list as completed in order to
 get a picture of the number of tasks left to do
 2. To mark a task, type in the following command:
 ```text
