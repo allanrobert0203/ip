@@ -119,12 +119,12 @@ Use 'findduplicates' to check for duplicate tasks.
 ```
 
 ## Finding feature
-1. This is to find your tasks with the help of a keyword in the task
-2. To find a task, simply type in the following command:
+This is to find your tasks with the help of a keyword in the task
+To find a task, simply type in the following command:
 ```
 find <keyword that is within the task description>
 ```
-3. The expected output will be like this for example:
+The expected output will be like this for example:
 ```
 Here are the matching tasks in your list:
 1. [T][ ] wash dishes
